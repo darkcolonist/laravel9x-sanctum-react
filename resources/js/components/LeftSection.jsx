@@ -1,4 +1,4 @@
-import { Paper, MenuList, MenuItem, ListItemText, ListItemIcon } from '@mui/material';
+import { Paper, MenuList, MenuItem, ListItemText, ListItemIcon, Typography } from '@mui/material';
 import React from 'react';
 import { NavLink, useMatch, useResolvedPath } from 'react-router-dom';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -8,20 +8,24 @@ function CustomLinkMenuItem({children, to, ...props}){
     let match = useMatch({ path: resolved.pathname, end: true });
 
     return <MenuItem component={NavLink} to={to} {...props}
-        selected={match !== null}>
-        <ListItemIcon>
-            {match ? <ArrowForwardIosIcon /> : undefined}
-        </ListItemIcon>
-        <ListItemText>{children}</ListItemText>
+      selected={match !== null}>
+      <ListItemIcon>
+          {match ? <ArrowForwardIosIcon /> : undefined}
+      </ListItemIcon>
+      <ListItemText>{children}</ListItemText>
     </MenuItem>
 }
 
 export default function(){
   return <Paper>
-      <MenuList dense>
-        <CustomLinkMenuItem to="/">Home</CustomLinkMenuItem>
-        <CustomLinkMenuItem to="/about">About</CustomLinkMenuItem>
-        <CustomLinkMenuItem to="/wow">Wow</CustomLinkMenuItem>
-      </MenuList>
-    </Paper>
+    <MenuList dense>
+      <MenuItem disabled>
+        <ListItemIcon></ListItemIcon>
+        <ListItemText>{app.name}</ListItemText>
+      </MenuItem>
+      <CustomLinkMenuItem to="/">Home</CustomLinkMenuItem>
+      <CustomLinkMenuItem to="/about">About</CustomLinkMenuItem>
+      <CustomLinkMenuItem to="/wow">Wow</CustomLinkMenuItem>
+    </MenuList>
+  </Paper>
 }
