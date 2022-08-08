@@ -1,15 +1,27 @@
-import { Stack, Button } from '@mui/material';
+import { Paper, MenuList, MenuItem, ListItemText, ListItemIcon } from '@mui/material';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink, useMatch, useResolvedPath } from 'react-router-dom';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+
+function CustomLinkMenuItem({children, to, ...props}){
+    let resolved = useResolvedPath(to);
+    let match = useMatch({ path: resolved.pathname, end: true });
+
+    return <MenuItem component={NavLink} to={to} {...props}
+        selected={match !== null}>
+        <ListItemIcon>
+            {match ? <ArrowForwardIosIcon /> : undefined}
+        </ListItemIcon>
+        <ListItemText>{children}</ListItemText>
+    </MenuItem>
+}
 
 export default function(){
-  return <Stack spacing={1}>
-    <Button component={Link} to="/">Home</Button>
-    <Button component={Link} to="/about">Link 1</Button>
-    <Button component={Link} to="/wow">Awesome component</Button>
-    <Button>Link 2</Button>
-    <Button>Link 3</Button>
-    <Button>Link 4</Button>
-    <Button>Link 5</Button>
-  </Stack>
+  return <Paper>
+      <MenuList dense>
+        <CustomLinkMenuItem to="/">Home</CustomLinkMenuItem>
+        <CustomLinkMenuItem to="/about">About</CustomLinkMenuItem>
+        <CustomLinkMenuItem to="/wow">Wow</CustomLinkMenuItem>
+      </MenuList>
+    </Paper>
 }

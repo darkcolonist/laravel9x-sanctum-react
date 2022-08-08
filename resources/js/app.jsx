@@ -18,11 +18,11 @@ const darkTheme = createTheme({
 
 ReactDOM.createRoot(document.getElementById('root')).render(
 <React.StrictMode>
-    <ThemeProvider theme={darkTheme}>
-        <CssBaseline />
-        <BrowserRouter>
-            <PrimaryLayout />
-        </BrowserRouter>
-    </ThemeProvider>
+  <ThemeProvider theme={darkTheme}>
+    <CssBaseline />
+    <BrowserRouter>
+      <PrimaryLayout />
+    </BrowserRouter>
+  </ThemeProvider>
 </React.StrictMode>
 )
