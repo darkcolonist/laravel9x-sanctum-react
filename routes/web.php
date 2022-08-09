@@ -29,10 +29,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
   });
 });
 
-// Route::post('login', [Auth\LoginController::class, 'login']);
-// Route::post('logout', [Auth\LoginController::class, 'logout']);
+Route::post('login', [App\Http\Controllers\Auth\LoginController::class, 'login']);
+Route::post('logout', [App\Http\Controllers\Auth\LoginController::class, 'logout']);
 
-Auth::routes();
+// Auth::routes();
 
 Route::any('/{any}', function(){
   return view('myreact');

@@ -1,4 +1,4 @@
-import { Paper, MenuList, MenuItem, ListItemText, ListItemIcon, Typography } from '@mui/material';
+import { Paper, MenuList, MenuItem, ListItemText, ListItemIcon, Typography, Divider } from '@mui/material';
 import React from 'react';
 import { NavLink, useMatch, useResolvedPath } from 'react-router-dom';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -26,6 +26,9 @@ export default function(){
       <CustomLinkMenuItem to="/books">Books</CustomLinkMenuItem>
       <CustomLinkMenuItem to="/about">About</CustomLinkMenuItem>
       <CustomLinkMenuItem to="/wow">Wow</CustomLinkMenuItem>
+      <Divider />
+      <CustomLinkMenuItem to="/login">Login</CustomLinkMenuItem>
+      <CustomLinkMenuItem to="/logout">Logout</CustomLinkMenuItem>
     </MenuList>
   </Paper>
 }
