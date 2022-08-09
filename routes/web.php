@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,6 +20,20 @@ use Illuminate\Support\Facades\Route;
 //     return view('myreact');
 // });
 
+Route::middleware(['auth:sanctum'])->group(function () {
+  Route::get('/secure', function () {
+    return "you are viewing secure page.";
+  });
+});
+
+Route::post('/login', function(Request $request){
+  return $request->all();
+});
+
 Route::any('/{any}', function(){
-    return view('myreact');
+  return view('myreact');
 })->where('any', '.*');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

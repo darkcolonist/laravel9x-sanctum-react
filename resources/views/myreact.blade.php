@@ -9,7 +9,9 @@
     const app = {!!
       json_encode([
         "name" => env("APP_NAME"),
-        "env" => env("APP_ENV")
+        "env" => env("APP_ENV"),
+        "url" => url('/'),
+        "csrf" => csrf_token()
       ], JSON_PRETTY_PRINT);
     !!};
   </script>

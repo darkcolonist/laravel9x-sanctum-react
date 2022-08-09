@@ -20,7 +20,6 @@ export default function(){
   return <Paper>
     <MenuList dense>
       <MenuItem disabled>
-        <ListItemIcon></ListItemIcon>
         <ListItemText>{app.name}</ListItemText>
       </MenuItem>
       <CustomLinkMenuItem to="/">Home</CustomLinkMenuItem>

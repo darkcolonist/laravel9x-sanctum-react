@@ -8,9 +8,18 @@ window._ = _;
  */
 
 import axios from 'axios';
-window.axios = axios;
+const apiClient = axios.create({
+  baseURL: app.url,
+  withCredentials: true
+});
 
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+apiClient.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+apiClient.interceptors.request.use(function (config) {
+  config.headers['x-csrf-token'] = app.csrf;
+  return config;
+}, null, { synchronous: true });
+
+window.axios = apiClient;
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
