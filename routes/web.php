@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\BookController;
+// use App\Http\Controllers\Auth;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -20,20 +21,19 @@ use Illuminate\Support\Facades\Route;
 //     return view('myreact');
 // });
 
+
 Route::middleware(['auth:sanctum'])->group(function () {
+  Route::get('/book', [BookController::class, 'index']);
   Route::get('/secure', function () {
     return "you are viewing secure page.";
   });
 });
 
-Route::post('/login', function(Request $request){
-  return $request->all();
-});
+// Route::post('login', [Auth\LoginController::class, 'login']);
+// Route::post('logout', [Auth\LoginController::class, 'logout']);
+
+Auth::routes();
 
 Route::any('/{any}', function(){
   return view('myreact');
 })->where('any', '.*');
-
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

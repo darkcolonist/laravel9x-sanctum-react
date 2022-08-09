@@ -26,7 +26,7 @@ export default function(){
     onSubmit: (values) => {
       // const {username, password} = values;
 
-      // axios.get('sanctum/csrf-cookie').then(function(response){
+      axios.get('sanctum/csrf-cookie').then(function(response){
         axios.post('login', {
           email: values.email,
           password: values.password
@@ -35,7 +35,7 @@ export default function(){
         }).catch(function (error) {
           console.error(error);
         });
-      // });
+      });
     }
   });
 

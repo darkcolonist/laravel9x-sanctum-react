@@ -14,10 +14,11 @@ const apiClient = axios.create({
 });
 
 apiClient.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-apiClient.interceptors.request.use(function (config) {
-  config.headers['x-csrf-token'] = app.csrf;
-  return config;
-}, null, { synchronous: true });
+// commenting below as being handled by get:/sanctum/csrf-cookie in login
+// apiClient.interceptors.request.use(function (config) {
+//   config.headers['x-csrf-token'] = app.csrf;
+//   return config;
+// }, null, { synchronous: true });
 
 window.axios = apiClient;
 

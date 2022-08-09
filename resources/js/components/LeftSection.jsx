@@ -23,6 +23,7 @@ export default function(){
         <ListItemText>{app.name}</ListItemText>
       </MenuItem>
       <CustomLinkMenuItem to="/">Home</CustomLinkMenuItem>
+      <CustomLinkMenuItem to="/books">Books</CustomLinkMenuItem>
       <CustomLinkMenuItem to="/about">About</CustomLinkMenuItem>
       <CustomLinkMenuItem to="/wow">Wow</CustomLinkMenuItem>
     </MenuList>
