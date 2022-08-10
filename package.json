@@ -20,5 +20,7 @@
     "formik": "^2.2.9",
     "yup": "^0.32.11"
   },
-  "dependencies": { }
+  "dependencies": {
+    "zustand": "^4.0.0"
+  }
 }

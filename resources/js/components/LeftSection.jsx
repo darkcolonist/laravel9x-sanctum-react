@@ -4,16 +4,16 @@ import { NavLink, useMatch, useResolvedPath } from 'react-router-dom';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 function CustomLinkMenuItem({children, to, ...props}){
-    let resolved = useResolvedPath(to);
-    let match = useMatch({ path: resolved.pathname, end: true });
+  let resolved = useResolvedPath(to);
+  let match = useMatch({ path: resolved.pathname, end: true });
 
-    return <MenuItem component={NavLink} to={to} {...props}
-      selected={match !== null}>
-      <ListItemIcon>
-          {match ? <ArrowForwardIosIcon /> : undefined}
-      </ListItemIcon>
-      <ListItemText>{children}</ListItemText>
-    </MenuItem>
+  return <MenuItem component={NavLink} to={to} {...props}
+    selected={match !== null}>
+    <ListItemIcon>
+        {match ? <ArrowForwardIosIcon /> : undefined}
+    </ListItemIcon>
+    <ListItemText>{children}</ListItemText>
+  </MenuItem>
 }
 
 export default function(){
