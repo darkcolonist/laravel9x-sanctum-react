@@ -1,10 +1,15 @@
 import { Button, Stack, TextField } from "@mui/material";
 import { useFormik } from "formik";
+import { Navigate } from 'react-router-dom';
 import React from "react";
 import * as yup from 'yup';
 
 export default function(){
   const { axios } = window;
+
+  const [loggedIn, setLoggedIn] = React.useState(
+    sessionStorage.getItem('loggedIn') == 'true' || false
+  );
 
   const validationSchema = yup.object({
     email: yup
@@ -31,7 +36,11 @@ export default function(){
           email: values.email,
           password: values.password
         }).then(function (response) {
-          console.info(response);
+          if(response.status === 204){
+            setLoggedIn(true);
+            sessionStorage.setItem("loggedIn", true);
+          }
+          // console.info(response);
         }).catch(function (error) {
           console.error(error);
         });
@@ -40,6 +49,7 @@ export default function(){
   });
 
   return <React.Fragment>
+    {loggedIn && <Navigate to="/" replace={true} />}
     <form onSubmit={formik.handleSubmit}>
       <Stack spacing={2} width={250}>
         <TextField name="email" label="email"
