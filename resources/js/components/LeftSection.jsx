@@ -2,6 +2,7 @@ import { Paper, MenuList, MenuItem, ListItemText, ListItemIcon, Typography, Divi
 import React from 'react';
 import { NavLink, useMatch, useResolvedPath } from 'react-router-dom';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { useAuthStore } from './appState';
 
 function CustomLinkMenuItem({children, to, ...props}){
   let resolved = useResolvedPath(to);
@@ -17,18 +18,25 @@ function CustomLinkMenuItem({children, to, ...props}){
 }
 
 export default function(){
+  const { email, loggedIn } = useAuthStore();
+
   return <Paper>
     <MenuList dense>
       <MenuItem disabled>
         <ListItemText>{app.name}</ListItemText>
       </MenuItem>
+      {loggedIn && <Divider />}
+      {loggedIn && <MenuItem disabled>
+        <ListItemText>Welcome, {email}</ListItemText>
+      </MenuItem>}
+      {loggedIn && <Divider />}
       <CustomLinkMenuItem to="/">Home</CustomLinkMenuItem>
       <CustomLinkMenuItem to="/books">Books</CustomLinkMenuItem>
       <CustomLinkMenuItem to="/about">About</CustomLinkMenuItem>
       <CustomLinkMenuItem to="/wow">Wow</CustomLinkMenuItem>
       <Divider />
-      <CustomLinkMenuItem to="/login">Login</CustomLinkMenuItem>
-      <CustomLinkMenuItem to="/logout">Logout</CustomLinkMenuItem>
+      {loggedIn && <CustomLinkMenuItem to="/logout">Logout</CustomLinkMenuItem>}
+      {!loggedIn && <CustomLinkMenuItem to="/login">Login</CustomLinkMenuItem>}
     </MenuList>
   </Paper>
 }

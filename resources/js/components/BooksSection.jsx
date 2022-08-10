@@ -22,7 +22,10 @@ export default function(){
     );
   });
 
-  return <Stack>
-    {bookRenderer}
-  </Stack>
+  return <React.Fragment>
+    <Typography variant="h5">Books</Typography>
+    <Stack>
+      {bookRenderer}
+    </Stack>
+  </React.Fragment>
 }

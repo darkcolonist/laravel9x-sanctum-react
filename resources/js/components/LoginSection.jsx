@@ -3,13 +3,11 @@ import { useFormik } from "formik";
 import { Navigate } from 'react-router-dom';
 import React from "react";
 import * as yup from 'yup';
+import { useAuthStore } from "./appState";
 
 export default function(){
   const { axios } = window;
-
-  const [loggedIn, setLoggedIn] = React.useState(
-    sessionStorage.getItem('loggedIn') == 'true' || false
-  );
+  const { loggedIn, setLoggedIn } = useAuthStore();
 
   const validationSchema = yup.object({
     email: yup
@@ -29,18 +27,16 @@ export default function(){
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      // const {username, password} = values;
-
       axios.get('sanctum/csrf-cookie').then(function(response){
         axios.post('login', {
           email: values.email,
           password: values.password
         }).then(function (response) {
           if(response.status === 204){
-            setLoggedIn(true);
-            sessionStorage.setItem("loggedIn", true);
+            setLoggedIn({
+              email: values.email
+            });
           }
-          // console.info(response);
         }).catch(function (error) {
           console.error(error);
         });
