@@ -7,15 +7,24 @@ const defaultState = {
 
 const saveToBrowserStorage = (key, data) => {
   const dataString = JSON.stringify(data);
-  sessionStorage.setItem(key, dataString);
+  localStorage.setItem(key, dataString);
 }
 
 const takeFromBrowserStorage = (key) => {
-  const dataString = sessionStorage.getItem(key);
-  return JSON.parse(dataString);
+  const dataString = localStorage.getItem(key);
+
+  var returnData = {};
+
+  try {
+    returnData = JSON.parse(dataString);
+  } catch (error) {}
+
+  return returnData;
 }
 
 const storageAuth = takeFromBrowserStorage("auth");
+
+// console.log('loaded auth', storageAuth);
 
 const useAuthStore = create((set) => ({
   email: storageAuth ? storageAuth["email"] : defaultState["email"],

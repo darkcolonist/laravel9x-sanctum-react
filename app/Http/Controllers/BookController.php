@@ -14,7 +14,7 @@ class BookController extends Controller
      */
     public function index()
     {
-        return response()->json(Book::all());
+        return response()->json(Book::inRandomOrder()->get());
     }
 
     /**

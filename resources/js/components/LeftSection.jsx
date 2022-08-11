@@ -17,6 +17,16 @@ function CustomLinkMenuItem({children, to, ...props}){
   </MenuItem>
 }
 
+function ProtectedLinks(props){
+  const { loggedIn } = useAuthStore();
+  if (!loggedIn)
+    return undefined;
+
+  return <>
+    {props.children}
+  </>
+}
+
 export default function(){
   const { email, loggedIn } = useAuthStore();
 
@@ -31,11 +41,13 @@ export default function(){
       </MenuItem>}
       {loggedIn && <Divider />}
       <CustomLinkMenuItem to="/">Home</CustomLinkMenuItem>
-      <CustomLinkMenuItem to="/books">Books</CustomLinkMenuItem>
+      <ProtectedLinks>
+        <CustomLinkMenuItem to="/dashboard/wow">Wow</CustomLinkMenuItem>
+        <CustomLinkMenuItem to="/dashboard/books">Books</CustomLinkMenuItem>
+      </ProtectedLinks>
       <CustomLinkMenuItem to="/about">About</CustomLinkMenuItem>
-      <CustomLinkMenuItem to="/wow">Wow</CustomLinkMenuItem>
       <Divider />
-      {loggedIn && <CustomLinkMenuItem to="/logout">Logout</CustomLinkMenuItem>}
+      {loggedIn && <CustomLinkMenuItem to="/dashboard/logout">Logout</CustomLinkMenuItem>}
       {!loggedIn && <CustomLinkMenuItem to="/login">Login</CustomLinkMenuItem>}
     </MenuList>
   </Paper>
