@@ -20,6 +20,19 @@ apiClient.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //   return config;
 // }, null, { synchronous: true });
 
+// import { useAuthStore } from "./components/appState"; <--- breaks the rules of hooks
+apiClient.interceptors.response.use(function(response){
+  return response;
+}, function(error){
+  // const logoutDispatch = useAuthStore((state) => state.setLoggedOut);  <--- breaks the rules of hooks
+  console.error(error.response.data);
+  if(error.response.status === 401){
+    console.info('attempting to handle 401...');
+    // logoutDispatch(true);  <--- breaks the rules of hooks
+    window.location.href = `${app.url}/dashboard/logout`;
+  }
+});
+
 window.axios = apiClient;
 
 /**
