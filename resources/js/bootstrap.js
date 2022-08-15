@@ -20,6 +20,11 @@ apiClient.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //   return config;
 // }, null, { synchronous: true });
 
+/**
+ * below is erroneous - instead, moved this solution to 
+ * ./components/AxiosResponseInterceptor.jsx and applied to
+ * ./layouts/PrimaryLayout.jsx
+ */
 // // import { useAuthStore } from "./components/appState"; // <--- breaks the rules of hooks
 // apiClient.interceptors.response.use(function(response){
 //   return response;
