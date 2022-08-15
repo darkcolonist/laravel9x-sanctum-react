@@ -1,4 +1,4 @@
-import { Paper, MenuList, MenuItem, ListItemText, ListItemIcon, Typography, Divider } from '@mui/material';
+import { Paper, MenuList, MenuItem, ListItemText, ListItemIcon, Divider, Collapse } from '@mui/material';
 import React from 'react';
 import { NavLink, useMatch, useResolvedPath } from 'react-router-dom';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -19,12 +19,9 @@ function CustomLinkMenuItem({children, to, ...props}){
 
 function ProtectedLinks(props){
   const { loggedIn } = useAuthStore();
-  if (!loggedIn)
-    return undefined;
-
-  return <>
+  return <Collapse in={loggedIn}>
     {props.children}
-  </>
+  </Collapse>
 }
 
 export default function(){
@@ -35,20 +32,20 @@ export default function(){
       <MenuItem disabled>
         <ListItemText>{app.name}</ListItemText>
       </MenuItem>
-      {loggedIn && <Divider />}
-      {loggedIn && <MenuItem disabled>
+      <Collapse in={loggedIn}><Divider /></Collapse>
+      <Collapse in={loggedIn}><MenuItem disabled>
         <ListItemText>Welcome, {email}</ListItemText>
-      </MenuItem>}
-      {loggedIn && <Divider />}
+      </MenuItem></Collapse>
+      <Collapse in={loggedIn}><Divider /></Collapse>
       <CustomLinkMenuItem to="/">Home</CustomLinkMenuItem>
       <ProtectedLinks>
         <CustomLinkMenuItem to="/dashboard/wow">Wow</CustomLinkMenuItem>
         <CustomLinkMenuItem to="/dashboard/books">Books</CustomLinkMenuItem>
       </ProtectedLinks>
       <CustomLinkMenuItem to="/about">About</CustomLinkMenuItem>
-      <Divider />
-      {loggedIn && <CustomLinkMenuItem to="/dashboard/logout">Logout</CustomLinkMenuItem>}
-      {!loggedIn && <CustomLinkMenuItem to="/login">Login</CustomLinkMenuItem>}
+      <Divider  />
+      <Collapse in={loggedIn}><CustomLinkMenuItem to="/dashboard/logout">Logout</CustomLinkMenuItem></Collapse>
+      <Collapse in={!loggedIn}><CustomLinkMenuItem to="/login">Login</CustomLinkMenuItem></Collapse>
     </MenuList>
   </Paper>
 }
