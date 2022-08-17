@@ -1,5 +1,6 @@
 import { LinearProgress, Paper, Stack, Typography } from "@mui/material";
 import React from "react";
+import SectionHeaderTitle from "./SectionHeaderTitle";
 
 export default function(){
   const [books,setBooks] = React.useState([]);
@@ -30,7 +31,7 @@ export default function(){
   }
 
   return <React.Fragment>
-    <Typography variant="h5">Books</Typography>
+    <SectionHeaderTitle>Books</SectionHeaderTitle>
     <Stack>
       {bookRenderer}
     </Stack>

@@ -1,4 +1,4 @@
-import { Button, Stack, TextField } from "@mui/material";
+import { Button, LinearProgress, Stack, TextField, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import { Navigate } from 'react-router-dom';
 import React from "react";
@@ -8,6 +8,7 @@ import { useAuthStore } from "./appState";
 export default function(){
   const { axios } = window;
   const { loggedIn, setLoggedIn } = useAuthStore();
+  const [isLoggingIn,setIsLoggingIn] = React.useState(false);
 
   const validationSchema = yup.object({
     email: yup
@@ -27,6 +28,7 @@ export default function(){
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
+      setIsLoggingIn(true);
       axios.get('sanctum/csrf-cookie').then(function(response){
         axios.post('login', {
           email: values.email,
@@ -39,6 +41,8 @@ export default function(){
           }
         }).catch(function (error) {
           console.error(error);
+        }).finally(() => {
+          setIsLoggingIn(false);
         });
       });
     }
@@ -46,7 +50,8 @@ export default function(){
 
   return <React.Fragment>
     {loggedIn && <Navigate to="/" replace={true} />}
-    <form onSubmit={formik.handleSubmit}>
+    {isLoggingIn && <><LinearProgress /><Typography>logging you in, please wait...</Typography></>}
+    {!isLoggingIn && <form onSubmit={formik.handleSubmit}>
       <Stack spacing={2} width={250}>
         <TextField name="email" label="email"
           value={formik.values.email}
@@ -62,6 +67,6 @@ export default function(){
         />
         <Button variant="outlined" type="submit">Login</Button>
       </Stack>
-    </form>
+    </form>}
   </React.Fragment>
 }

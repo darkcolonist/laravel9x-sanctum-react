@@ -1,5 +1,4 @@
-import { Button, Stack, TextField } from "@mui/material";
-import { useFormik } from "formik";
+import { LinearProgress, Typography } from "@mui/material";
 import React from "react";
 import { Navigate } from "react-router-dom";
 import { useAuthStore } from "./appState";
@@ -29,6 +28,6 @@ export default function(){
 
   return <React.Fragment>
     {!loggedIn && <Navigate to="/login" replace={true} />}
-    logging you out...
+    <><LinearProgress /><Typography>logging you out, please wait...</Typography></>
   </React.Fragment>
 }

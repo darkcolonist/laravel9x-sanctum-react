@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+if(env("APP_ENV") === 'local')
+  sleep(1); // simulate slowness (or loader testing)
+
 // Route::get('/', function () {
 //     // return view('welcome');
 //     return view('myreact');
