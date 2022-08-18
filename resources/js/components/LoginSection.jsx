@@ -23,27 +23,38 @@ export default function(){
 
   const formik = useFormik({
     initialValues: {
-      email: 'someone@example.com',
+      email: 'admin@example.com',
       password: 'strongpassword'
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
+    onSubmit: async (values, { setErrors }) => {
       setIsLoggingIn(true);
-      axios.get('sanctum/csrf-cookie').then(function(response){
-        axios.post('login', {
-          email: values.email,
-          password: values.password
-        }).then(function (response) {
-          if(response.status === 204){
-            setLoggedIn({
-              email: values.email
-            });
-          }
-        }).catch(function (error) {
-          console.error(error);
-        }).finally(() => {
-          setIsLoggingIn(false);
+
+      await axios.get('sanctum/csrf-cookie');
+
+      let errored = false;
+      await axios.post('login', {
+        email: values.email,
+        password: values.password
+      }).catch(function (error) {
+        errored = true;
+        setErrors({
+          email: "invalid login",
+          password: "invalid login",
         });
+        // console.error(error);
+      })
+
+      if(errored) return;
+
+      await axios.post('me').then(function (response) {
+        // console.info(response.data);
+        setLoggedIn({
+          email: response.data.email
+          , permissions: response.data.permissions
+        });
+      }).finally(() => {
+        setIsLoggingIn(false);
       });
     }
   });

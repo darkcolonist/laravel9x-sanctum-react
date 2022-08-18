@@ -3,6 +3,7 @@ import React from 'react';
 import { NavLink, useMatch, useResolvedPath } from 'react-router-dom';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useAuthStore } from './appState';
+import Permission from './Permission';
 
 function CustomLinkMenuItem({children, to, ...props}){
   let resolved = useResolvedPath(to);
@@ -41,6 +42,9 @@ export default function(){
       <ProtectedLinks>
         <CustomLinkMenuItem to="/dashboard/wow">Wow</CustomLinkMenuItem>
         <CustomLinkMenuItem to="/dashboard/books">Books</CustomLinkMenuItem>
+        <Permission can="edit users">
+          <CustomLinkMenuItem to="/dashboard/users">Users</CustomLinkMenuItem>
+        </Permission>
       </ProtectedLinks>
       <CustomLinkMenuItem to="/about">About</CustomLinkMenuItem>
       <Divider  />

@@ -2,7 +2,8 @@ import create from "zustand";
 
 const defaultState = {
   email: '',
-  loggedIn: false
+  loggedIn: false,
+  permissions: [],
 };
 
 const saveToBrowserStorage = (key, data) => {
@@ -36,6 +37,7 @@ const useAuthStore = create((set) => ({
       // save also into browser storage
       const ourTempState = {
         email: data.email,
+        permissions: data.permissions,
         loggedIn: true
       };
 

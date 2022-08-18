@@ -30,6 +30,20 @@ Route::middleware(['auth:sanctum'])->group(function () {
   Route::get('/secure', function () {
     return "you are viewing secure page.";
   });
+  Route::post('/me', function(){
+    $user = auth()->user();
+
+    $permissions = [];
+
+    foreach ($user->getAllPermissions() as $pkey => $pval) {
+      $permissions[] = $pval["name"];
+    }
+
+    return [
+      "email" => $user->email
+      , "permissions" => $permissions
+    ];
+  });
 });
 
 Route::post('login', [App\Http\Controllers\Auth\LoginController::class, 'login']);
