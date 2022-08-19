@@ -1,12 +1,21 @@
 import React from "react";
 import { useAuthStore } from "./appState";
 
-function detectIfCan(can){
+export function detectIfCan(can){
   const { permissions } = useAuthStore();
 
   if(permissions.includes(can)) return true;
 
   return false;
+}
+
+
+export function PermitWithFallback({ can, fallback, ...props }) {
+  fallback = fallback || <span>restricted</span>
+
+  if (detectIfCan(can)) return props.children;
+
+  return fallback;
 }
 
 export default function({can, ...props}){

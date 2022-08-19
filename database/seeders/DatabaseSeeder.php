@@ -48,11 +48,11 @@ class DatabaseSeeder extends Seeder
     Permission::create(['name' => 'edit users'])
       ->assignRole($administratorRole);
 
-    Permission::create(['name' => 'edit articles'])
+    Permission::create(['name' => 'edit books'])
       ->assignRole($administratorRole)
       ->assignRole($librarianRole);
 
-    Permission::create(['name' => 'view articles'])
+    Permission::create(['name' => 'view books'])
       ->assignRole($administratorRole)
       ->assignRole($librarianRole)
       ->assignRole($studentRole);

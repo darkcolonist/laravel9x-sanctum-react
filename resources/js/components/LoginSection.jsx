@@ -49,10 +49,11 @@ export default function(){
 
       await axios.post('me').then(function (response) {
         // console.info(response.data);
-        setLoggedIn({
-          email: response.data.email
-          , permissions: response.data.permissions
-        });
+        // setLoggedIn({
+        //   email: response.data.email
+        //   , permissions: response.data.permissions
+        // });
+        setLoggedIn(response.data);
       }).finally(() => {
         setIsLoggingIn(false);
       });

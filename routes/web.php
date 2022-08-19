@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\UserController;
 // use App\Http\Controllers\Auth;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -26,7 +27,8 @@ if(env("APP_ENV") === 'local')
 
 
 Route::middleware(['auth:sanctum'])->group(function () {
-  Route::get('/book', [BookController::class, 'index']);
+  Route::get('/book', [BookController::class, 'index'])->middleware(['can:view books']);
+  Route::get('/user', [UserController::class, 'index'])->middleware(['can:view users']);
   Route::get('/secure', function () {
     return "you are viewing secure page.";
   });

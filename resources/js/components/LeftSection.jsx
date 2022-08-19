@@ -41,8 +41,10 @@ export default function(){
       <CustomLinkMenuItem to="/">Home</CustomLinkMenuItem>
       <ProtectedLinks>
         <CustomLinkMenuItem to="/dashboard/wow">Wow</CustomLinkMenuItem>
-        <CustomLinkMenuItem to="/dashboard/books">Books</CustomLinkMenuItem>
-        <Permission can="edit users">
+        <Permission can="view books">
+          <CustomLinkMenuItem to="/dashboard/books">Books</CustomLinkMenuItem>
+        </Permission>
+        <Permission can="view users">
           <CustomLinkMenuItem to="/dashboard/users">Users</CustomLinkMenuItem>
         </Permission>
       </ProtectedLinks>

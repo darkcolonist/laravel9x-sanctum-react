@@ -1,6 +1,9 @@
 import React from "react";
-import { Typography } from "@mui/material";
+import { Divider, Typography } from "@mui/material";
 
 export default function(props){
-  return <Typography {...props} variant="h5"></Typography>
+  return <React.Fragment>
+    <Typography {...props} variant="h5"></Typography>
+    <Divider />
+  </React.Fragment>
 }
