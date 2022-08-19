@@ -1,8 +1,12 @@
 import React from "react";
+import { useAuthStore } from "./appState";
 
 function detectIfCan(can){
-  console.info('checking permission', can);
-  return true;
+  const { permissions } = useAuthStore();
+
+  if(permissions.includes(can)) return true;
+
+  return false;
 }
 
 export default function({can, ...props}){

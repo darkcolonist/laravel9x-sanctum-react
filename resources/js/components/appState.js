@@ -1,11 +1,5 @@
 import create from "zustand";
 
-const defaultState = {
-  email: '',
-  loggedIn: false,
-  permissions: [],
-};
-
 const saveToBrowserStorage = (key, data) => {
   const dataString = JSON.stringify(data);
   localStorage.setItem(key, dataString);
@@ -23,14 +17,27 @@ const takeFromBrowserStorage = (key) => {
   return returnData;
 }
 
+const defaultState = {
+  email: '',
+  loggedIn: false,
+  permissions: [],
+};
 const storageAuth = takeFromBrowserStorage("auth");
 
-// console.log('loaded auth', storageAuth);
+const authStoreFields = {};
+
+for (const defaultStateKey in defaultState) {
+  if (Object.hasOwnProperty.call(defaultState, defaultStateKey)) {
+    const element = defaultState[defaultStateKey];
+    authStoreFields[defaultStateKey] = storageAuth ? storageAuth[defaultStateKey] : element;
+  }
+}
 
 const useAuthStore = create((set) => ({
-  email: storageAuth ? storageAuth["email"] : defaultState["email"],
-  loggedIn: storageAuth ? storageAuth["loggedIn"] : defaultState["loggedIn"],
-  // loggedIn: takeFromBrowserStorage("auth")["loggedIn"],
+  ...authStoreFields,
+  // email: storageAuth ? storageAuth["email"] : defaultState["email"],
+  // loggedIn: storageAuth ? storageAuth["loggedIn"] : defaultState["loggedIn"],
+  // permissions: storageAuth ? storageAuth["permissions"] : defaultState["permissions"],
 
   setLoggedIn: (data) => {
     return set((state) => {
