@@ -1,23 +1,34 @@
-import { LinearProgress, Paper, Stack, Typography } from "@mui/material";
+import { LinearProgress, Paper, Typography } from "@mui/material";
+import DataGrid from "./DataGrid";
 import React from "react";
 import SectionHeaderTitle from "./SectionHeaderTitle";
+import Moment from "./Moment";
+
+const columns = [
+  { field: 'name', headerName: 'name', width: 300 }
+  , { field: 'email', headerName: 'email', width: 300 }
+  , { field: 'created_at', headerName: 'created_at', width: 400, 
+      renderCell: params => <Moment>2020-01-01</Moment> }
+  , { field: 'updated_at', headerName: 'updated_at', width: 400, 
+      renderCell: params => <Moment>2020-01-01</Moment> }
+];
 
 export default function(){
-  const [users,setUsers] = React.useState([]);
-  const [usersLoaded,setUsersLoaded] = React.useState(false);
+  const [rows,setRows] = React.useState([]);
+  const [rowsLoaded,setRowsLoaded] = React.useState(false);
 
   React.useEffect(() => {
     axios.get('user')
       .then(response => {
-        setUsers(response.data);
-        setUsersLoaded(true);
+        setRows(response.data);
+        setRowsLoaded(true);
       });
   },[]);
 
   const userRenderer = [];
 
-  if(usersLoaded){
-    users.forEach((user, index) => {
+  if(rowsLoaded){
+    rows.forEach((user, index) => {
       userRenderer.push(
         <Paper sx={{m:1, p:1}} key={index}>
           <Typography variant="body1">{user.title}</Typography>
@@ -32,8 +43,10 @@ export default function(){
 
   return <React.Fragment>
     <SectionHeaderTitle>Users</SectionHeaderTitle>
-    <Stack>
-      {userRenderer}
-    </Stack>
+    <DataGrid 
+      columns={columns} 
+      rows={rows}
+      getRowId={row => row.email}
+      rowCount={99} />
   </React.Fragment>
 }

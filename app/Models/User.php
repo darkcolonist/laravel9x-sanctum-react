@@ -33,6 +33,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'id' // we will use email as ID from hereon
     ];
 
     /**
