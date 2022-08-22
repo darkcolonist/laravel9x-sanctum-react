@@ -55,7 +55,6 @@ export default function(){
   const [isFetching, setIsFetching] = React.useState(true);
   const [rowCount,setRowCount] = React.useState(0);
   const [rows,setRows] = React.useState([]);
-  const [rowsLoaded,setRowsLoaded] = React.useState(false);
 
   React.useEffect(() => {
     axios.get('user')
@@ -63,7 +62,6 @@ export default function(){
         setIsFetching(false);
         setRows(response.data.rows);
         setRowCount(response.data.total);
-        setRowsLoaded(true);
       });
   },[]);
 
@@ -83,7 +81,6 @@ export default function(){
           </Permission>
         </React.Fragment>
       }
-      newItemRoute=''
       rowCount={rowCount} />
   </React.Fragment>
 }

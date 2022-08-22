@@ -5,9 +5,9 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useAuthStore } from './appState';
 import Permission from './Permission';
 
-function CustomLinkMenuItem({children, to, ...props}){
+function CustomLinkMenuItem({children, to, end, ...props}){
   let resolved = useResolvedPath(to);
-  let match = useMatch({ path: resolved.pathname, end: true });
+  let match = useMatch({ path: resolved.pathname, end: end && true });
 
   return <MenuItem component={NavLink} to={to} {...props}
     selected={match !== null}>
@@ -42,10 +42,10 @@ export default function(){
       <ProtectedLinks>
         <CustomLinkMenuItem to="/dashboard/wow">Wow</CustomLinkMenuItem>
         <Permission can="view books">
-          <CustomLinkMenuItem to="/dashboard/books">Books</CustomLinkMenuItem>
+          <CustomLinkMenuItem to="/dashboard/books" end={false}>Books</CustomLinkMenuItem>
         </Permission>
         <Permission can="view users">
-          <CustomLinkMenuItem to="/dashboard/users">Users</CustomLinkMenuItem>
+          <CustomLinkMenuItem to="/dashboard/users" end={false}>Users</CustomLinkMenuItem>
         </Permission>
       </ProtectedLinks>
       <CustomLinkMenuItem to="/about">About</CustomLinkMenuItem>
