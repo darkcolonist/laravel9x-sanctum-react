@@ -85,6 +85,7 @@ export default function(){
       rows={rows}
       loading={isFetching}
       getRowId={row => row.email}
+      newItemRoute='/dashboard/users/new'
       rowCount={rowCount} />
   </React.Fragment>
 }
