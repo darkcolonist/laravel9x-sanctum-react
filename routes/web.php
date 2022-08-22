@@ -2,8 +2,7 @@
 
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\UserController;
-// use App\Http\Controllers\Auth;
-use Illuminate\Support\Facades\Auth;
+// use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,32 +19,14 @@ use Illuminate\Support\Facades\Route;
 if(env("APP_ENV") === 'local')
   sleep(1); // simulate slowness (or loader testing)
 
-// Route::get('/', function () {
-//     // return view('welcome');
-//     return view('myreact');
-// });
-
-
 Route::middleware(['auth:sanctum'])->group(function () {
-  Route::get('/book', [BookController::class, 'index'])->middleware(['can:view books']);
-  Route::get('/user', [UserController::class, 'index'])->middleware(['can:view users']);
+  Route::resource('user', UserController::class);
+  Route::resource('book', BookController::class);
+
   Route::get('/secure', function () {
     return "you are viewing secure page.";
   });
-  Route::post('/me', function(){
-    $user = auth()->user();
-
-    $permissions = [];
-
-    foreach ($user->getAllPermissions() as $pkey => $pval) {
-      $permissions[] = $pval["name"];
-    }
-
-    return [
-      "email" => $user->email
-      , "permissions" => $permissions
-    ];
-  });
+  Route::post('/me', [UserController::class, 'showMyDetails']);
 });
 
 Route::post('login', [App\Http\Controllers\Auth\LoginController::class, 'login']);

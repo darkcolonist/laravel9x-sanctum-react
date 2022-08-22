@@ -7,6 +7,14 @@ use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
+  public function __construct()
+  {
+    $this->middleware(['can:view books']);
+    $this->middleware(['can:edit books'])->only(['update', 'edit']);
+    $this->middleware(['can:create books'])->only(['create', 'store']);
+    $this->middleware(['can:delete books'])->only(['destroy']);
+  }
+
   /**
   * Display a listing of the resource.
   *

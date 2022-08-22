@@ -7,6 +7,14 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+  public function __construct()
+  {
+    $this->middleware(['can:view users'])->except(['showMyDetails']);
+    $this->middleware(['can:edit users'])->only(['update','edit']);
+    $this->middleware(['can:create users'])->only(['create','store']);
+    $this->middleware(['can:delete users'])->only(['destroy']);
+  }
+
   /**
   * Display a listing of the resource.
   *
@@ -88,5 +96,19 @@ class UserController extends Controller
   public function destroy(User $user)
   {
     //
+  }
+
+  public function showMyDetails(){
+    $user = auth()->user();
+
+    $permissions = [];
+
+    foreach ($user->getAllPermissions() as $pkey => $pval) {
+      $permissions[] = $pval["name"];
+    }
+
+    return [
+      "email" => $user->email, "permissions" => $permissions
+    ];
   }
 }
