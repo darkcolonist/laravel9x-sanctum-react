@@ -14,10 +14,14 @@ class UserController extends Controller
   */
   public function index()
   {
-    $users = User::inRandomOrder()
-      ->limit(5)->get();
+    $users = User::inRandomOrder();
+    $total = $users->count();
+    $limited = $users->limit(5)->get();
 
-    return response()->json($users);
+    return response()->json([
+      "total" => $total
+      , "rows" => $limited
+    ]);
   }
   
   /**

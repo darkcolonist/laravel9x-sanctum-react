@@ -43,7 +43,8 @@ class DatabaseSeeder extends Seeder
 
     Permission::query()->delete();
     Permission::create(['name' => 'view users'])
-      ->assignRole($administratorRole);
+      ->assignRole($administratorRole)
+      ->assignRole($librarianRole);
 
     Permission::create(['name' => 'edit users'])
       ->assignRole($administratorRole);
