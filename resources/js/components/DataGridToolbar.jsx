@@ -26,14 +26,13 @@ export function CustomSearchBox(props){
   ></TextField>
 }
 
-export default function(props){
+export default function({newItemRoute, ...props}){
   const navigate = useNavigate();
 
   return <GridToolbarContainer>
     <Grid item>
       <Button onClick={() => {
-        navigate('/your/new/route');
-        // history.push('/autoinvoice/new');
+        navigate(newItemRoute || 'new');
       }}>
         <AddIcon /> New Item
       </Button>
