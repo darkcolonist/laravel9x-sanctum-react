@@ -6,9 +6,14 @@ import * as yup from 'yup';
 import { useAuthStore } from "./appState";
 
 export default function(){
+  const stateDefaults = {
+    loggingInMessage: 'logging you in'
+  };
+
   const { axios } = window;
   const { loggedIn, setLoggedIn } = useAuthStore();
   const [isLoggingIn,setIsLoggingIn] = React.useState(false);
+  const [loggingInMessage, setLoggingInMessage] = React.useState(stateDefaults.loggingInMessage);
 
   const validationSchema = yup.object({
     email: yup
@@ -29,9 +34,10 @@ export default function(){
     validationSchema: validationSchema,
     onSubmit: async (values, { setErrors }) => {
       setIsLoggingIn(true);
-
+      setLoggingInMessage('establishing your session');
       await axios.get('sanctum/csrf-cookie');
 
+      setLoggingInMessage(stateDefaults.loggingInMessage);
       let errored = false;
       await axios.post('login', {
         email: values.email,
@@ -46,7 +52,7 @@ export default function(){
       })
 
       if(errored) return;
-
+      setLoggingInMessage('setting up workspace');
       await axios.post('me').then(function (response) {
         // console.info(response.data);
         // setLoggedIn({
@@ -56,13 +62,14 @@ export default function(){
         setLoggedIn(response.data);
       }).finally(() => {
         setIsLoggingIn(false);
+        setLoggingInMessage(stateDefaults.loggingInMessage);
       });
     }
   });
 
   return <React.Fragment>
     {loggedIn && <Navigate to="/" replace={true} />}
-    {isLoggingIn && <><LinearProgress /><Typography>logging you in, please wait...</Typography></>}
+    {isLoggingIn && <><LinearProgress /><Typography>{loggingInMessage}, please wait...</Typography></>}
     {!isLoggingIn && <form onSubmit={formik.handleSubmit}>
       <Stack spacing={2} width={250}>
         <TextField name="email" label="email"
