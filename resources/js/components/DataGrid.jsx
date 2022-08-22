@@ -2,7 +2,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import DataGridToolbar from "./DataGridToolbar";
 import React from "react";
 
-export default function ({newItemRoute, ...props}){
+export default function ({toolbarItems, ...props}){
   return <DataGrid 
     autoHeight 
     density="compact"
@@ -19,7 +19,7 @@ export default function ({newItemRoute, ...props}){
     }}
     componentsProps={{
       toolbar: {
-        newItemRoute
+        toolbarItems
       }
     }}
     {...props} />

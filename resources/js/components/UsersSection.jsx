@@ -1,15 +1,20 @@
-import { IconButton, LinearProgress, Paper, Typography } from "@mui/material";
+import { Button, IconButton } from "@mui/material";
 import DataGrid from "./DataGrid";
 import React from "react";
 import SectionHeaderTitle from "./SectionHeaderTitle";
 import Moment from "./Moment";
 import EditIcon from '@mui/icons-material/Edit';
 import PreviewIcon from '@mui/icons-material/Preview';
-import { detectIfCan } from "./Permission";
+import Permission, { detectIfCan } from "./Permission";
+import { useNavigate } from "react-router-dom";
+import AddIcon from '@mui/icons-material/Add';
 
 export default function(){
+  const navigate = useNavigate();
+
   const handleActionClick = function(action, email){
-    console.info(action, email);
+    // console.info(action, email);
+    navigate(`/dashboard/users/${action}/${email}`);
   }
 
   const columns = [
@@ -23,12 +28,12 @@ export default function(){
         const actions = [];
 
         if(detectIfCan('view users'))
-          actions.push(<IconButton key={actions.length} onClick={e => handleActionClick("view", params.row.email)}>
+          actions.push(<IconButton title={`view ${params.row.name}`} key={actions.length} onClick={e => handleActionClick("view", params.id /* or params.row.email */)}>
             <PreviewIcon />
           </IconButton>);
 
         if(detectIfCan('edit users'))
-          actions.push(<IconButton key={actions.length} onClick={e => handleActionClick("edit", params.row.email)}>
+          actions.push(<IconButton title={`edit ${params.row.name}`} key={actions.length} onClick={e => handleActionClick("edit", params.id /* or params.row.email */)}>
             <EditIcon />
           </IconButton>);
 
@@ -62,22 +67,6 @@ export default function(){
       });
   },[]);
 
-  const userRenderer = [];
-
-  if(rowsLoaded){
-    rows.forEach((user, index) => {
-      userRenderer.push(
-        <Paper sx={{m:1, p:1}} key={index}>
-          <Typography variant="body1">{user.title}</Typography>
-          <Typography variant="body2">by {user.author}</Typography>
-        </Paper>
-      );
-    });
-  }
-  else{
-    userRenderer.push(<LinearProgress key="wait"/>);
-  }
-
   return <React.Fragment>
     <SectionHeaderTitle>Users</SectionHeaderTitle>
     <DataGrid 
@@ -85,7 +74,16 @@ export default function(){
       rows={rows}
       loading={isFetching}
       getRowId={row => row.email}
-      newItemRoute='/dashboard/users/new'
+      toolbarItems={
+        <React.Fragment>
+          <Permission can="create users">
+            <Button onClick={() => {
+              navigate('/dashboard/users/new');
+            }}><AddIcon /> New User</Button>
+          </Permission>
+        </React.Fragment>
+      }
+      newItemRoute=''
       rowCount={rowCount} />
   </React.Fragment>
 }

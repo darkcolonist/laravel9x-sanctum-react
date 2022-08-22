@@ -1,7 +1,6 @@
-import { Button, Grid, TextField } from '@mui/material';
+import { Grid, TextField } from '@mui/material';
 import { GridToolbarContainer } from '@mui/x-data-grid';
 import SearchIcon from '@mui/icons-material/Search';
-import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from "react-router-dom";
 import React from 'react';
 
@@ -26,17 +25,9 @@ export function CustomSearchBox(props){
   ></TextField>
 }
 
-export default function({newItemRoute, ...props}){
-  const navigate = useNavigate();
-
+export default function({toolbarItems, ...props}){
   return <GridToolbarContainer>
-    <Grid item>
-      <Button onClick={() => {
-        navigate(newItemRoute || 'new');
-      }}>
-        <AddIcon /> New Item
-      </Button>
-    </Grid>
+    <Grid item>{toolbarItems}</Grid>
 
     <Grid style={{ flex: 1 }} />
 

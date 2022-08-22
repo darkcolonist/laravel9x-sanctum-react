@@ -38,14 +38,13 @@ export default function(){
         <Route path="/dashboard" element={<ProtectedRoutes />}>
           <Route path="wow" element={<Suspense><MyAwesomeComponent /></Suspense>} />
           <Route path="books" element={
-            <PermitWithFallback can="view books">
-              <Suspense><BooksSection /></Suspense>
-            </PermitWithFallback>
+            <PermitWithFallback can="view books"><Suspense><BooksSection/></Suspense></PermitWithFallback>
           } />
           <Route path="users" element={
-            <PermitWithFallback can="view users">
-              <Suspense><UsersSection /></Suspense>
-            </PermitWithFallback>
+            <PermitWithFallback can="view users"><Suspense><UsersSection/></Suspense></PermitWithFallback>
+          } />
+          <Route path="users/new" element={
+            <PermitWithFallback can="create users"><Suspense><UsersSection /></Suspense></PermitWithFallback>
           } />
           <Route path="logout" element={<Suspense><LogoutSection /></Suspense>} />
         </Route>
