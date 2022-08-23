@@ -3,6 +3,7 @@ import React from 'react';
 import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import { useAuthStore } from './appState';
 import { PermitWithFallback } from './Permission';
+import SaveBookSection from './SaveBookSection';
 import UnauthorizedSection from './UnauthorizedSection';
 import UsersSection from './UsersSection';
 const BooksSection = React.lazy(() => import('./BooksSection'));
@@ -39,6 +40,9 @@ export default function(){
           <Route path="wow" element={<Suspense><MyAwesomeComponent /></Suspense>} />
           <Route path="books" element={
             <PermitWithFallback can="view books"><Suspense><BooksSection/></Suspense></PermitWithFallback>
+          } />
+          <Route path="books/new" element={
+            <PermitWithFallback can="create books"><Suspense><SaveBookSection /></Suspense></PermitWithFallback>
           } />
           <Route path="users" element={
             <PermitWithFallback can="view users"><Suspense><UsersSection/></Suspense></PermitWithFallback>
