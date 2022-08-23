@@ -44,7 +44,7 @@ export default function(){
             <PermitWithFallback can="view users"><Suspense><UsersSection/></Suspense></PermitWithFallback>
           } />
           <Route path="users/new" element={
-            <PermitWithFallback can="create users"><Suspense><UsersSection /></Suspense></PermitWithFallback>
+            <PermitWithFallback can="create users"><div>create users go here</div></PermitWithFallback>
           } />
           <Route path="logout" element={<Suspense><LogoutSection /></Suspense>} />
         </Route>

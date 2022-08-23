@@ -22,11 +22,13 @@ class BookController extends Controller
   */
   public function index()
   {
-    // sleep(2);
-    $books = Book::inRandomOrder()
-      ->limit(5)->get();
+    $books = Book::inRandomOrder();
+    $total = $books->count();
+    $limited = $books->limit(5)->get();
 
-    return response()->json($books);
+    return response()->json([
+      "total" => $total, "rows" => $limited
+    ]);
   }
   
   /**

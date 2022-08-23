@@ -20,7 +20,9 @@ if(env("APP_ENV") === 'local')
   sleep(1); // simulate slowness (or loader testing)
 
 Route::middleware(['auth:sanctum'])->group(function () {
-  Route::resource('user', UserController::class);
+  Route::resource('user', UserController::class)->parameters([
+    'user' => 'user:email'
+  ]);
   Route::resource('book', BookController::class);
 
   Route::get('/secure', function () {
@@ -34,6 +36,6 @@ Route::post('logout', [App\Http\Controllers\Auth\LoginController::class, 'logout
 
 // Auth::routes();
 
-Route::any('/{any}', function(){
+Route::any('/{any?}', function(){
   return view('myreact');
-})->where('any', '.*');
+})->where('any', '.*')->name('/');
