@@ -2,7 +2,7 @@
  * solution taken from https://stackoverflow.com/a/71047161/27698
  */
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from "./appState";
 
 function promiseResolveError(error){
@@ -13,6 +13,7 @@ function promiseResolveError(error){
 export default function(){
   const { setLoggedOut } = useAuthStore();
   const navigate = useNavigate();
+  const location = useLocation();
 
   React.useEffect(() => {
     axios.interceptors.response.use(undefined, function(error){
@@ -29,6 +30,14 @@ export default function(){
          */
         case 403:
           navigate('/unauthorized');
+          return promiseResolveError(error);
+
+        /**
+         * not found
+         */
+        case 404:
+          // console.info(location);
+          navigate(`/404?origin=${location.pathname}`);
           return promiseResolveError(error);
       }
 

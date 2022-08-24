@@ -44,6 +44,9 @@ export default function(){
           <Route path="books/new" element={
             <PermitWithFallback can="create books"><Suspense><SaveBookSection /></Suspense></PermitWithFallback>
           } />
+          <Route path="books/edit/:id" element={
+            <PermitWithFallback can="edit books"><Suspense><SaveBookSection /></Suspense></PermitWithFallback>
+          } />
           <Route path="users" element={
             <PermitWithFallback can="view users"><Suspense><UsersSection/></Suspense></PermitWithFallback>
           } />

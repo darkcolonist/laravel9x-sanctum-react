@@ -24,7 +24,7 @@ class BookController extends Controller
   {
     $books = Book::select()->orderBy("created_at", "desc");
     $total = $books->count();
-    $limited = $books->limit(5)->get();
+    $limited = $books->limit(100)->get();
 
     return response()->json([
       "total" => $total, "rows" => $limited
@@ -63,7 +63,7 @@ class BookController extends Controller
   */
   public function show(Book $book)
   {
-    //
+    return $book;
   }
   
   /**
@@ -86,7 +86,9 @@ class BookController extends Controller
   */
   public function update(Request $request, Book $book)
   {
-    //
+    $book->fill($request->input());
+    $book->save();
+    return $book;
   }
   
   /**
