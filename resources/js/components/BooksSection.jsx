@@ -28,12 +28,12 @@ export default function () {
         const actions = [];
 
         if (detectIfCan('view books'))
-          actions.push(<IconButton title={`view ${params.row.name}`} key={actions.length} onClick={e => handleActionClick("view", params.id /* or params.row.email */)}>
+          actions.push(<IconButton title={`view ${params.row.title}`} key={actions.length} onClick={e => handleActionClick("view", params.id /* or params.row.email */)}>
             <PreviewIcon />
           </IconButton>);
 
         if (detectIfCan('edit books'))
-          actions.push(<IconButton title={`edit ${params.row.name}`} key={actions.length} onClick={e => handleActionClick("edit", params.id /* or params.row.email */)}>
+          actions.push(<IconButton title={`edit ${params.row.title}`} key={actions.length} onClick={e => handleActionClick("edit", params.id /* or params.row.email */)}>
             <EditIcon />
           </IconButton>);
 
