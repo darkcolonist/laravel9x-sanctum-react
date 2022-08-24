@@ -22,7 +22,7 @@ class BookController extends Controller
   */
   public function index()
   {
-    $books = Book::inRandomOrder();
+    $books = Book::select()->orderBy("created_at", "desc");
     $total = $books->count();
     $limited = $books->limit(5)->get();
 
@@ -49,7 +49,10 @@ class BookController extends Controller
   */
   public function store(Request $request)
   {
-    //
+    $book = new Book();
+    $book->fill($request->input());
+    $book->save();
+    return $book;
   }
   
   /**

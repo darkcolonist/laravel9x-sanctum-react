@@ -9,7 +9,7 @@ import SectionHeaderTitle from "./SectionHeaderTitle";
 const fields = [
   {
     name: 'title',
-    initial: 'test',
+    initial: app.env === 'local' ? 'test title' : '',
     type: 'text',
     validation: yup
       .string()
@@ -19,7 +19,7 @@ const fields = [
   },
   {
     name: 'author',
-    initial: 'test',
+    initial: app.env === 'local' ? 'test author' : '',
     type: 'text',
     validation: yup
       .string()
@@ -47,7 +47,7 @@ export default function(){
         ...values
       })
       .then(function (response){
-        showSnackbar(`saved ${values.title}`, "success");
+        showSnackbar(`saved ${response.data.id}:${values.title}`, "success");
         return response;
       })
       .catch(function (error) {

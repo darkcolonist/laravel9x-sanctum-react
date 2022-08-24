@@ -22,8 +22,8 @@ if(env("APP_ENV") === 'local')
 Route::middleware(['auth:sanctum'])->group(function () {
   Route::resource('user', UserController::class)->parameters([
     'user' => 'user:email'
-  ]);
-  Route::resource('book', BookController::class);
+  ])->except(['create', 'edit']);;
+  Route::resource('book', BookController::class)->except(['create', 'edit']);
 
   Route::get('/secure', function () {
     return "you are viewing secure page.";
