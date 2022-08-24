@@ -80,6 +80,9 @@ export default function(){
       // });
 
       formik.resetForm();
+
+      // formik.setFieldValue('title', 'grrrr'); // <--- if you want to dynamically change the value
+
       // console.info(fields.reduce((acc, cur) => ({ ...acc, [cur.name]: cur.initial }), {}));
       // setInitialFormValues(fields.reduce((acc, cur) => ({ ...acc, [cur.name]: cur.initial }), {}));
       return response;
