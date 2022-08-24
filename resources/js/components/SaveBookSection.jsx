@@ -3,13 +3,13 @@ import { useFormik } from "formik";
 import { Navigate } from 'react-router-dom';
 import React from "react";
 import * as yup from 'yup';
-import { useAuthStore } from "./appState";
+import { useSnackbarStore } from "./appState";
 import SectionHeaderTitle from "./SectionHeaderTitle";
 
 const fields = [
   {
     name: 'title',
-    initial: '',
+    initial: 'test',
     type: 'text',
     validation: yup
       .string()
@@ -19,7 +19,7 @@ const fields = [
   },
   {
     name: 'author',
-    initial: '',
+    initial: 'test',
     type: 'text',
     validation: yup
       .string()
@@ -31,6 +31,7 @@ const fields = [
 
 export default function(){
   const { axios } = window;
+  const { show: showSnackbar } = useSnackbarStore();
 
   const validationSchema = yup.object(
     fields.reduce((acc, cur) => ({ ...acc, [cur.name]: cur.validation }), {}));
@@ -39,11 +40,20 @@ export default function(){
     initialValues: fields.reduce((acc, cur) => ({ ...acc, [cur.name]: cur.initial }), {}),
     validationSchema: validationSchema,
     onSubmit: async (values, { setErrors }) => {
+      showSnackbar(`saving ${values.title}`, "info");
+
       let errored = false;
       await axios.post('book', {
         ...values
-      }).catch(function (error) {
+      })
+      .then(function (response){
+        showSnackbar(`saved ${values.title}`, "success");
+        return response;
+      })
+      .catch(function (error) {
         errored = true;
+        showSnackbar(`unable to save ${values.title}`, "error");
+
         // setErrors({
         //   email: "invalid login",
         //   password: "invalid login",
