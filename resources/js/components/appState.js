@@ -64,4 +64,33 @@ const useAuthStore = create((set) => ({
   }
 }));
 
-export { useAuthStore };
+const defaultSnackbarState = {
+  message: "hello",
+  severity: "info",
+  open: false,
+};
+
+const useSnackbarStore = create((set) => ({
+  ...defaultSnackbarState,
+
+  show: (message, severity) => {
+    return set((state) => {
+      const ourTempState = {
+        message: message,
+        severity: severity || defaultSnackbarState.severity,
+        open: true
+      };
+
+      return ourTempState;
+    });
+  },
+
+  hide: () => {
+    return set((state) => ({ open: false }));
+  }
+}));
+
+export { 
+  useAuthStore
+  , useSnackbarStore
+};
