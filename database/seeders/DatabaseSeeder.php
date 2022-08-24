@@ -54,7 +54,7 @@ class DatabaseSeeder extends Seeder
     ->assignRole($administratorRole);
 
     Permission::create(['name' => 'create books'])
-    ->assignRole($administratorRole)
+      ->assignRole($administratorRole)
       ->assignRole($librarianRole);
 
     Permission::create(['name' => 'edit books'])
@@ -65,6 +65,9 @@ class DatabaseSeeder extends Seeder
       ->assignRole($administratorRole)
       ->assignRole($librarianRole)
       ->assignRole($studentRole);
+
+    Permission::create(['name' => 'delete books'])
+      ->assignRole($administratorRole);
 
     User::truncate();
     $defaultPassword = 'strongpassword';

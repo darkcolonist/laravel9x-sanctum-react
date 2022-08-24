@@ -6,10 +6,13 @@ import Moment from "./Moment";
 import EditIcon from '@mui/icons-material/Edit';
 import PreviewIcon from '@mui/icons-material/Preview';
 import AddIcon from '@mui/icons-material/Add';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import Permission, { detectIfCan } from "./Permission";
 import { useNavigate } from "react-router-dom";
 import { useDialogStore } from "./appState";
 import ViewBookDialogContent from "./ViewBookDialogContent";
+import ConfirmDialogContent from "./ConfirmDialogContent";
+// import WarningIcon from '@mui/icons-material/Warning';
 
 export default function () {
   const navigate = useNavigate();
@@ -28,23 +31,41 @@ export default function () {
       sortable: false,
       headerAlign: 'center',
       align: 'center',
+      width: 150,
       renderCell: (params) => {
         const actions = [];
 
         if (detectIfCan('view books'))
-          actions.push(<IconButton title={`view ${params.row.title}`} key={actions.length} onClick={e => 
-            // handleActionClick("view", params.id /* or params.row.email */)
-            showDialog(ViewBookDialogContent, {
-              id: params.id
-            })
-            // showDialog(<ViewBookDialogContent id={params.id} />)
-          }>
+          actions.push(<IconButton title={`view ${params.row.title}`} key={actions.length} 
+            onClick={e => 
+              // handleActionClick("view", params.id /* or params.row.email */)
+              showDialog(ViewBookDialogContent, {
+                id: params.id
+              })
+              // showDialog(<ViewBookDialogContent id={params.id} />)
+            }>
             <PreviewIcon />
           </IconButton>);
 
         if (detectIfCan('edit books'))
-          actions.push(<IconButton title={`edit ${params.row.title}`} key={actions.length} onClick={e => handleActionClick("edit", params.id /* or params.row.email */)}>
+          actions.push(<IconButton title={`edit ${params.row.title}`} key={actions.length} 
+            onClick={e => handleActionClick("edit", params.id /* or params.row.email */)}>
             <EditIcon />
+          </IconButton>);
+
+        if (detectIfCan('delete books'))
+          actions.push(<IconButton title={`delete ${params.row.title}`} key={actions.length} 
+            onClick={e =>
+              // handleActionClick("view", params.id /* or params.row.email */)
+              showDialog(ConfirmDialogContent, {
+                // title: "confirm irreversible action",
+                icon: DeleteForeverIcon,
+                message: `you are about to delete ${params.row.title}`,
+                action: async () => axios.delete(`book/${params.id}`)
+              })
+              // showDialog(<ViewBookDialogContent id={params.id} />)
+            }>
+            <DeleteForeverIcon />
           </IconButton>);
 
         return actions;
