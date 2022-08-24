@@ -90,7 +90,34 @@ const useSnackbarStore = create((set) => ({
   }
 }));
 
+const defaultDialogState = {
+  open: false,
+  element: "",
+  elementProps: {}
+}
+
+const useDialogStore = create((set) => ({
+  ...defaultDialogState,
+
+  show: (element, elementProps) => {
+    return set((state) => {
+      const ourTempState = {
+        element,
+        elementProps,
+        open: true
+      };
+
+      return ourTempState;
+    });
+  },
+
+  hide: () => {
+    return set((state) => ({ open: false }));
+  }
+}));
+
 export { 
   useAuthStore
   , useSnackbarStore
+  , useDialogStore
 };

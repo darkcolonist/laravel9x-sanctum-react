@@ -1,16 +1,20 @@
-import { Button, IconButton } from "@mui/material";
+import { Button, IconButton, Stack } from "@mui/material";
 import DataGrid from "./DataGrid";
 import React from "react";
 import SectionHeaderTitle from "./SectionHeaderTitle";
 import Moment from "./Moment";
 import EditIcon from '@mui/icons-material/Edit';
 import PreviewIcon from '@mui/icons-material/Preview';
+import AddIcon from '@mui/icons-material/Add';
 import Permission, { detectIfCan } from "./Permission";
 import { useNavigate } from "react-router-dom";
-import AddIcon from '@mui/icons-material/Add';
+import { useDialogStore } from "./appState";
+import ViewBookDialogContent from "./ViewBookDialogContent";
 
 export default function () {
   const navigate = useNavigate();
+  
+  const { show: showDialog } = useDialogStore();
 
   const handleActionClick = function (action, email) {
     // console.info(action, email);
@@ -28,7 +32,13 @@ export default function () {
         const actions = [];
 
         if (detectIfCan('view books'))
-          actions.push(<IconButton title={`view ${params.row.title}`} key={actions.length} onClick={e => handleActionClick("view", params.id /* or params.row.email */)}>
+          actions.push(<IconButton title={`view ${params.row.title}`} key={actions.length} onClick={e => 
+            // handleActionClick("view", params.id /* or params.row.email */)
+            showDialog(ViewBookDialogContent, {
+              id: params.id
+            })
+            // showDialog(<ViewBookDialogContent id={params.id} />)
+          }>
             <PreviewIcon />
           </IconButton>);
 
