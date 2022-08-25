@@ -99,6 +99,8 @@ class BookController extends Controller
   */
   public function destroy(Book $book)
   {
-    //
+    $arr = $book->toArray();
+    $book->delete();
+    return $arr;
   }
 }
