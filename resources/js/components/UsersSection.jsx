@@ -22,7 +22,6 @@ export default function(){
 
   return <React.Fragment>
     <SectionHeaderTitle>Users</SectionHeaderTitle>
-
     <MasterDataGrid 
       path={corePath}
       modelName="user"
