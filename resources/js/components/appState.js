@@ -1,4 +1,5 @@
 import create from "zustand";
+import { persist } from 'zustand/middleware'
 
 const saveToBrowserStorage = (key, data) => {
   const dataString = JSON.stringify(data);
@@ -128,15 +129,42 @@ const defaultBookState = {
    */
   dataGridVersion: 0,
 };
-const useBookStore = create((set) => ({
-  ...defaultBookState,
+// const useBookStore = create((set) => ({
+//   ...defaultBookState,
 
-  refresh: () => {
-    return set((state) => ({ 
-      dataGridVersion: state.dataGridVersion + 1 
-    }));
-  }
-}));
+//   refresh: () => {
+//     return set((state) => ({
+//       dataGridVersion: state.dataGridVersion + 1
+//     }));
+//   }
+// }));
+const useBookStore = create(
+  persist(
+    (set, get) => ({
+        ...defaultBookState,
+        refresh: () => {
+          return set((state) => ({
+            dataGridVersion: state.dataGridVersion + 1
+          }));
+        }
+    }),
+    {
+      name: 'bookStorage',
+      getStorage: () =>
+        /**
+         * (optional) by default, 'local storage' is used
+         * but personally, i use sessionStorage so that it will only
+         * be stored in the current tab/window i am on and will not
+         * affect other tabs.
+         * 
+         * because of the 'persist' middle-ware, the above
+         * saveToBrowserStorage & takeFromBrowserStorage are now 
+         * obsolete
+         */
+        sessionStorage,
+    }
+  )
+);
 
 export { 
   useAuthStore
