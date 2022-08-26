@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
+  use \App\Traits\ResourceControllerTrait;
+
   public function __construct()
   {
     $this->middleware(['can:view books']);
@@ -20,11 +22,39 @@ class BookController extends Controller
   *
   * @return \Illuminate\Http\Response
   */
-  public function index()
+  public function index(Request $request)
   {
-    $books = Book::select()->orderBy("created_at", "desc");
+    $validation = $this->validateIndex($request);
+    if($validation["failed"])
+      return response($validation["errors"], 400);
+
+    $limit = $request->input("limit", 3);
+    $offset = ($request->input("page", 1) - 1) * $limit;
+
+    $books = Book::select();
+
+    if ($this->getSortModel($request)) {
+      $sortModel = $this->getSortModel($request);
+
+      if ($sortModel["sort"] == "asc")
+      $books->orderBy($sortModel["field"]);
+      else
+        $books->orderByDesc($sortModel["field"]);
+    }
+
+    if ($this->getSearchKeyword($request)) {
+      $searchKeyword = $this->getSearchKeyword($request);
+      $books->where(function($query) use ($searchKeyword){
+        $query->where("title", "like", "%" . $searchKeyword . "%")
+              ->orWhere("author", "like", "%" . $searchKeyword . "%");
+      });
+    }
+
     $total = $books->count();
-    $limited = $books->limit(100)->get();
+    $books->limit($limit)
+      ->offset($offset);
+
+    $limited = $books->get();
 
     return response()->json([
       "total" => $total, "rows" => $limited

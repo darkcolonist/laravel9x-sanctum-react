@@ -117,32 +117,24 @@ const useDialogStore = create((set) => ({
 }));
 
 const defaultBookState = {
-  dataGrid: {
-    page: 0,
-    sortModel: [],
-    pageSize: 10,
-    keyword: "",
-    
-    /** 
-     * increment this if you want the grid to refresh without changing
-     * other props.
-     */
-    version: 1 
-  }
+
+  dataGridPage: 0,
+  dataGridSortModel: [],
+  dataGridPageSize: 10,
+  dataGridKeyword: "",
+  /** 
+   * increment this if you want the grid to refresh without changing
+   * other props.
+   */
+  dataGridVersion: 0,
 };
 const useBookStore = create((set) => ({
   ...defaultBookState,
 
   refresh: () => {
-    return set((state) => {
-      return { 
-        // ...state,
-        dataGrid: {
-          ...state.dataGrid,
-          version: state.dataGrid.version + 1
-        }
-      };
-    });
+    return set((state) => ({ 
+      dataGridVersion: state.dataGridVersion + 1 
+    }));
   }
 }));
 

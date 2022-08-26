@@ -1,4 +1,4 @@
-import { Button, IconButton } from "@mui/material";
+import { Button, Divider, IconButton } from "@mui/material";
 import DataGrid from "./DataGrid";
 import React from "react";
 import SectionHeaderTitle from "./SectionHeaderTitle";
@@ -7,19 +7,20 @@ import EditIcon from '@mui/icons-material/Edit';
 import PreviewIcon from '@mui/icons-material/Preview';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import Permission, { detectIfCan } from "./Permission";
 import { useNavigate } from "react-router-dom";
 import { useBookStore, useDialogStore } from "./appState";
 import ViewBookDialogContent from "./ViewBookDialogContent";
 import ConfirmDialogContent from "./ConfirmDialogContent";
 import { useSnackbarStore } from "./appState";
-// import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
+import { Box } from "@mui/system";
 
 export default function () {
   const navigate = useNavigate();
   
   const { show: showDialog } = useDialogStore();
-  const { dataGrid: dataGridState, refresh: refreshDataGrid } = useBookStore();
+  const bookState = useBookStore();
   const { show: showSnackBar } = useSnackbarStore();
 
   const handleActionClick = function (action, email) {
@@ -67,10 +68,9 @@ export default function () {
                 action: async () => {
                   const deletedModel = await axios.delete(`book/${params.id}`);
                   showSnackBar(`deleted ${deletedModel.data.title}`);
-                  await refreshDataGrid();
+                  bookState.refresh();
                 }
               })
-              // showDialog(<ViewBookDialogContent id={params.id} />)
             }>
             <DeleteForeverIcon />
           </IconButton>);
@@ -78,15 +78,16 @@ export default function () {
         return actions;
       }
     }
+    , { field: 'id', headerName: 'id', width: 50}
     , { field: 'title', headerName: 'title', width: 450 }
     , { field: 'author', headerName: 'author', width: 150 }
     , {
-      field: 'created_at', headerName: 'created_at', width: 400,
-      renderCell: params => <Moment>{params.value}</Moment>
+      field: 'created_at', headerName: 'created_at', width: 200,
+      renderCell: params => <Moment format="fromNow">{params.value}</Moment>
     }
     , {
-      field: 'updated_at', headerName: 'updated_at', width: 400,
-      renderCell: params => <Moment>{params.value}</Moment>
+      field: 'updated_at', headerName: 'updated_at', width: 200,
+      renderCell: params => <Moment format="fromNow">{params.value}</Moment>
     }
   ];
 
@@ -96,8 +97,20 @@ export default function () {
 
   React.useEffect(() => {
     setIsFetching(true);
-    axios.get('book')
-      .then(response => {
+
+    /**
+     * for debugging
+     */
+    // console.info(bookState);
+
+    axios.get('book',{
+      params: {
+        page: bookState.dataGridPage + 1,
+        sortModel: bookState.dataGridSortModel,
+        limit: bookState.dataGridPageSize,
+        searchKeyword: bookState.dataGridKeyword,
+      }
+    }).then(response => {
         setIsFetching(false);
         setRows(response.data.rows);
         setRowCount(response.data.total);
@@ -106,28 +119,67 @@ export default function () {
          * for debugging, reloads the datagrid every second
          */
         // setTimeout(() => {
-        //   refreshDataGrid();
-        //   console.info(dataGridState);
+        //   bookState.refresh();
+        //   console.info(bookState);
         // }, 1000);
       });
-  }, [dataGridState.version]);
+  }, [bookState]);
 
   return <React.Fragment>
     <SectionHeaderTitle>Books</SectionHeaderTitle>
     <DataGrid
-      columns={columns}
-      rows={rows}
+      initialState={{
+        sorting: {
+          sortModel: bookState.dataGridSortModel,
+        }
+      }}
+      pageSize={bookState.dataGridPageSize}
       loading={isFetching}
       getRowId={row => row.id}
+      page={bookState.dataGridPage}
+      onPageSizeChange={(newVal) => useBookStore.setState({
+        dataGridPageSize: newVal
+      })}
+      onPageChange={(newVal) => useBookStore.setState({
+        dataGridPage: newVal
+      })}
+      onSortModelChange={(newVal) => useBookStore.setState({
+        dataGridSortModel: newVal
+      })}
+
+      searchProps={{
+        quickSearchValue: bookState.dataGridKeyword,
+        onQuickSearch: (keyword) => useBookStore.setState({
+          dataGridKeyword: keyword
+        })
+      }}
+
+      columns={columns}
+      rows={rows}
+
       toolbarItems={
-        <React.Fragment>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            width: 'fit-content',
+            border: (theme) => `1px solid ${theme.palette.divider}`,
+            borderRadius: 2,
+          }}
+        >
+          <Button onClick={() => {
+            bookState.refresh();
+          }} startIcon={<RefreshIcon />}>Refresh</Button>
           <Permission can="create books">
+            <Divider orientation="vertical" flexItem/>
             <Button onClick={() => {
               navigate('/dashboard/books/new');
-            }}><AddIcon /> New Book</Button>
+            }} startIcon={<AddIcon/>}>New Book</Button>
           </Permission>
-        </React.Fragment>
+        </Box>
       }
-      rowCount={rowCount} />
+
+      rowCount={rowCount} 
+      />
   </React.Fragment>
 }
