@@ -1,69 +1,50 @@
 import create from "zustand";
 import { persist } from 'zustand/middleware'
 
-const saveToBrowserStorage = (key, data) => {
-  const dataString = JSON.stringify(data);
-  localStorage.setItem(key, dataString);
-}
-
-const takeFromBrowserStorage = (key) => {
-  const dataString = localStorage.getItem(key);
-
-  var returnData = {};
-
-  try {
-    returnData = JSON.parse(dataString);
-  } catch (error) {}
-
-  return returnData;
-}
-
-const defaultState = {
+const defaultAuthState = {
   email: '',
   loggedIn: false,
   permissions: [],
 };
-const storageAuth = takeFromBrowserStorage("auth");
 
-const authStoreFields = {};
+const useAuthStore = create(persist(
+  (set, get) => ({
+    ...defaultAuthState,
 
-for (const defaultStateKey in defaultState) {
-  if (Object.hasOwnProperty.call(defaultState, defaultStateKey)) {
-    const element = defaultState[defaultStateKey];
-    authStoreFields[defaultStateKey] = storageAuth ? storageAuth[defaultStateKey] : element;
+    setLoggedIn: (data) => {
+      return set((state) => {
+        const ourTempState = {
+          email: data.email,
+          permissions: data.permissions,
+          loggedIn: true
+        };
+
+        return ourTempState;
+      });
+    },
+
+    setLoggedOut: () => {
+      return set((state) => {
+        return defaultAuthState;
+      });
+    }
+  }),
+  {
+    name: 'authStorage',
+    // getStorage: () =>
+    //   /**
+    //    * (optional) by default, 'local storage' is used
+    //    * but personally, i use sessionStorage so that it will only
+    //    * be stored in the current tab/window i am on and will not
+    //    * affect other tabs.
+    //    * 
+    //    * because of the 'persist' middle-ware, the above
+    //    * saveToBrowserStorage & takeFromBrowserStorage are now 
+    //    * obsolete
+    //    */
+    //   sessionStorage,
   }
-}
-
-const useAuthStore = create((set) => ({
-  ...authStoreFields,
-  // email: storageAuth ? storageAuth["email"] : defaultState["email"],
-  // loggedIn: storageAuth ? storageAuth["loggedIn"] : defaultState["loggedIn"],
-  // permissions: storageAuth ? storageAuth["permissions"] : defaultState["permissions"],
-
-  setLoggedIn: (data) => {
-    return set((state) => {
-      // save also into browser storage
-      const ourTempState = {
-        email: data.email,
-        permissions: data.permissions,
-        loggedIn: true
-      };
-
-      saveToBrowserStorage("auth", ourTempState);
-
-      return ourTempState;
-    });
-  },
-
-  setLoggedOut: () => {
-    return set((state) => {
-      // save also into browser storage
-      saveToBrowserStorage("auth", defaultState);
-
-      return defaultState;
-    });
-  }
-}));
+));
 
 const defaultSnackbarState = {
   message: "hello",
@@ -117,8 +98,7 @@ const useDialogStore = create((set) => ({
   }
 }));
 
-const defaultBookState = {
-
+const defaultDataGridState = {
   dataGridPage: 0,
   dataGridSortModel: [],
   dataGridPageSize: 10,
@@ -129,27 +109,47 @@ const defaultBookState = {
    */
   dataGridVersion: 0,
 };
-// const useBookStore = create((set) => ({
-//   ...defaultBookState,
 
-//   refresh: () => {
-//     return set((state) => ({
-//       dataGridVersion: state.dataGridVersion + 1
-//     }));
-//   }
-// }));
 const useBookStore = create(
   persist(
     (set, get) => ({
-        ...defaultBookState,
-        refresh: () => {
-          return set((state) => ({
-            dataGridVersion: state.dataGridVersion + 1
-          }));
-        }
+      ...defaultDataGridState,
+      refresh: () => {
+        return set((state) => ({
+          dataGridVersion: state.dataGridVersion + 1
+        }));
+      }
     }),
     {
       name: 'bookStorage',
+      getStorage: () =>
+        /**
+         * (optional) by default, 'local storage' is used
+         * but personally, i use sessionStorage so that it will only
+         * be stored in the current tab/window i am on and will not
+         * affect other tabs.
+         * 
+         * because of the 'persist' middle-ware, the above
+         * saveToBrowserStorage & takeFromBrowserStorage are now 
+         * obsolete
+         */
+        sessionStorage,
+    }
+  )
+);
+
+const useUserStore = create(
+  persist(
+    (set, get) => ({
+      ...defaultDataGridState,
+      refresh: () => {
+        return set((state) => ({
+          dataGridVersion: state.dataGridVersion + 1
+        }));
+      }
+    }),
+    {
+      name: 'userStorage',
       getStorage: () =>
         /**
          * (optional) by default, 'local storage' is used
@@ -171,4 +171,5 @@ export {
   , useSnackbarStore
   , useDialogStore
   , useBookStore
+  , useUserStore
 };
